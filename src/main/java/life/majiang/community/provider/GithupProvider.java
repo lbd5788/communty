@@ -31,7 +31,7 @@ public class GithupProvider {
             String token = str_token[1];
             return token;
         } catch (IOException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
         return null;
     }

@@ -28,3 +28,16 @@
 #5.git push
 #查看状态 git status
 #commit追加 git commit --amend --no-edit
+
+##脚本
+```sql
+ CREATE CACHEDTABLE PUBLIC.USER
+ (
+     ID int AUTO_INCREMENT PRIMARY KEY NOT NULL,
+     ACCOUNT_ID VARCHAR(100),
+     NAME VARCHAR(50),
+     TOKEN VARCHAR(36),
+     GMT_CREATE BIGINT,
+     GMT_MODIFIED BIGINT
+ );
+```

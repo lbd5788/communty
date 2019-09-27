@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
@@ -35,7 +37,8 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletRequest request){
+                           HttpServletRequest request,
+                           HttpServletResponse response){
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setCode(code);
         accessTokenDTO.setRedirect_uri(RedirectUri);
@@ -45,16 +48,20 @@ public class AuthorizeController {
         String accessToken = githupProvider.getAccessToken(accessTokenDTO);
         GithupUser githupuser = githupProvider.getUser(accessToken);
        if(githupuser!=null){
-        //登录成功，写session和cookies
+
            User user = new User();
-           user.setToken(UUID.randomUUID().toString());
+           String token = UUID.randomUUID().toString();
+           user.setToken(token);
            user.setAccounId(String.valueOf(githupuser.getId()));
            user.setName(githupuser.getName());
            user.setGmtCreate(System.currentTimeMillis());
            user.setGmtModified(user.getGmtCreate());
            userMapper.insert(user);
 
-            request.getSession().setAttribute("user",githupuser);
+           response.addCookie(new Cookie("token",token));
+            //登录成功，写session和cookies
+
+           // request.getSession().setAttribute("user",githupuser);
             return "redirect:/";
 
        }else{

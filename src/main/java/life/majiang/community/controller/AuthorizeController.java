@@ -47,7 +47,7 @@ public class AuthorizeController {
         accessTokenDTO.setClient_secret(ClientSecret);
         String accessToken = githupProvider.getAccessToken(accessTokenDTO);
         GithupUser githupuser = githupProvider.getUser(accessToken);
-       if(githupuser!=null){
+       if(githupuser!=null && githupuser.getId() != null){
 
            User user = new User();
            String token = UUID.randomUUID().toString();

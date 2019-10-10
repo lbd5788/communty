@@ -5,6 +5,7 @@ import life.majiang.community.dto.GithupUser;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.User;
 import life.majiang.community.provider.GithupProvider;
+import life.majiang.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -31,8 +32,9 @@ public class AuthorizeController {
     @Value("${githup.Client_secret}")
     private String ClientSecret;
 
+
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
@@ -52,12 +54,12 @@ public class AuthorizeController {
            User user = new User();
            String token = UUID.randomUUID().toString();
            user.setToken(token);
-           user.setAccounId(String.valueOf(githupuser.getId()));
+           user.setAccountId(String.valueOf(githupuser.getId()));
            user.setName(githupuser.getName());
-           user.setGmtCreate(System.currentTimeMillis());
-           user.setGmtModified(user.getGmtCreate());
+
            user.setAvatarUrl(githupuser.getAvatar_url());
-           userMapper.insert(user);
+           userService.createOrUpdate(user);
+           //userMapper.insert(user);
 
            response.addCookie(new Cookie("token",token));
             //登录成功，写session和cookies
@@ -69,6 +71,14 @@ public class AuthorizeController {
            //登录失败，重新登录
            return "redirect:/";
        }
-       // return "index";
+    }
+
+    @GetMapping("/logout")
+    public String logOut(HttpServletRequest request,HttpServletResponse response){
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }

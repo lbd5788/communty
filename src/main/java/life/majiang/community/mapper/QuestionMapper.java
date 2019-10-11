@@ -9,7 +9,7 @@ import java.util.List;
 public interface QuestionMapper {
 
 
-    @Insert("insert into question(title,description,gmt_create,gmt_modified,creator,tag) values(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})")
+    @Insert("insert into question(title,description,gmt_create,gmt_modified,creator,tag,view_count) values(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag},#{viewCount})")
     public void create(Question question);
 
     @Select("select * from question limit #{offset},#{size}")
@@ -19,14 +19,21 @@ public interface QuestionMapper {
     Integer count();
 
     @Select("select * from question where creator= #{userId} limit #{offset},#{size}")
-    List<Question> listByUserId(@Param(value = "userId") Integer userId, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
+    List<Question> listByUserId(@Param(value = "userId") Long userId, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
 
     @Select("select count(1) from question where creator= #{userId}")
-    Integer countByUserId(Integer userId);
+    Integer countByUserId(Long userId);
 
     @Select("select * from question where id= #{id}")
-    Question getById(Integer id);
+    Question getById(Long id);
 
     @Update("update question set title=#{title},description=#{description}, gmt_modified=#{gmtModified},tag=#{tag} where id=#{id}")
     int update(Question question);
+
+    @Update("update question set view_count=view_count+#{count} where id=#{id}")
+    void updateByView(@Param(value = "id") Long id,@Param(value = "viewCount") Integer viewCount);
+
+    @Update("update question set comment_count=comment_count+#{commentCount} where id=#{id}")
+    void updateByComment(@Param(value = "id") Long id,@Param(value = "commentCount") Integer commentCount);
+
 }

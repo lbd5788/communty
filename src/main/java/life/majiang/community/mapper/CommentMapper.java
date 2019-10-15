@@ -1,9 +1,10 @@
 package life.majiang.community.mapper;
 
 import life.majiang.community.model.Comment;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+
+import javax.websocket.server.PathParam;
+import java.util.List;
 
 @Mapper
 public interface CommentMapper {
@@ -14,4 +15,11 @@ public interface CommentMapper {
 
     @Select("select * from comment where id = #{id}")
     Comment getById(Long id);
+
+    @Select("select * from comment where parent_id = #{id} and type=#{type} order by gmt_create desc")
+    List<Comment> listByQuestionId(@Param(value = "id") Long id, @Param(value = "type")Integer type);
+
+    @Update("update comment set comment_count=comment_count+#{commentCount} where id=#{id}")
+    void updateByCommentCount(@Param(value = "id") Long id,@Param(value = "commentCount") Integer commentCount);
+
 }

@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 public class CustomizeExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    Object handle(HttpServletRequest request, Throwable e, Model model, HttpServletResponse response) {
+    ModelAndView handle(HttpServletRequest request, Throwable e, Model model, HttpServletResponse response) {
         String contentType = request.getContentType();
         ResultDTO resultDTO = null;
         if ("application/json".equals(contentType)) {

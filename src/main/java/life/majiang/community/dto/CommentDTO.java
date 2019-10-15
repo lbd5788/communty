@@ -1,9 +1,17 @@
-package life.majiang.community.model;
+package life.majiang.community.dto;
 
+import life.majiang.community.model.User;
 import lombok.Data;
 
+/**
+ * @program: community
+ * @create: 2019-10-12 15:13
+ * @author: payne
+ * @version:
+ * @description:
+ **/
 @Data
-public class Comment {
+public class CommentDTO {
     private Long id;
     private Long parentId;
     private Integer type;
@@ -13,5 +21,5 @@ public class Comment {
     private Long likeCount;
     private String content;
     private Integer commentCount;
-
+    private User user;
 }

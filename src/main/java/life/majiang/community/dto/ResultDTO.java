@@ -3,9 +3,7 @@ package life.majiang.community.dto;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import lombok.Data;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 
 @Data
 public class ResultDTO<T> {
